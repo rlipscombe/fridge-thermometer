@@ -13,9 +13,23 @@ function saveHistory() {
 function loadHistory() {
     History <- server.load();
     if (!("v" in History)) {
-        History.v <- 1;
+        History.v <- 2;
         History.temps <- [];
+
+        server.save(History);
     }
+    else if (History.v == 1) {
+        History.v <- 2;
+
+        foreach (k, v in History.temps) {
+            History.temps[k][0] *= 1000;
+        }
+
+        server.log("Migrated history to v2");
+        server.save(History);
+    }
+
+    server.log(format("Loaded history v%d, %d temperature readings", History.v, History.temps.len()));
 }
 
 device.on("readings", function(data) {
