@@ -1,6 +1,6 @@
 #require "rocky.class.nut:2.0.2"
 
-server.log(__EI.DEPLOYMENT_ID);
+server.log(__EI.DEPLOYMENT_ID + " (" + __EI.DEPLOYMENT_CREATED_AT + ")");
 
 History <- {};
 
