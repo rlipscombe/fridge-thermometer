@@ -1,5 +1,7 @@
 #require "rocky.class.nut:2.0.2"
 
+server.log(__EI.DEPLOYMENT_ID);
+
 History <- {};
 
 function saveHistory() {

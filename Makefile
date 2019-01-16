@@ -1,5 +1,13 @@
-all: agent.nut_ device.nut_
+all: build force-run
+
+build: agent.nut_ device.nut_
+
+run:
 	impt build run
+
+force-run:
+	impt dg update --min-supported-deployment `impt build deploy -z json | jq -r '.Deployment.id'`
+	impt dg restart
 
 agent.nut_: agent.nut index.html index.js
 	pleasebuild -l agent.nut > agent.nut_
