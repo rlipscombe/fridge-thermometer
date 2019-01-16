@@ -18,7 +18,8 @@ function loadHistory() {
 
 device.on("readings", function(data) {
     if (data.th) {
-        History.temps.push([time(), data.th.temperature]);
+        local time_ms = time() * 1000;
+        History.temps.push([time_ms, data.th.temperature]);
         if (History.temps.len() > 48 * 60) {
             History.temps.remove(0);
         }
