@@ -19,7 +19,7 @@ const chart = () => {
     );
 
     const y = d3.scaleLinear(
-        d3.extent(temperatures, t => t.temperature),
+        [0, d3.max(temperatures, t => t.temperature)],
         [height - marginBottom, marginTop]
     );
 
