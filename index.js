@@ -1,24 +1,52 @@
-function ready() {
-    var tempChart = $.plot("#temp-chart", [], {
-        xaxis: { mode: "time" },
-        lines: { show: true },
-        points: { show: false }
-    });
+import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
 
-    function refresh() {
-        $.get("temperature.json", function(data) {
-            $("#last-temp").text(data[data.length - 1][1]);
+const res = await fetch("temperatures.json");
+console.assert(res.status == 200);
+const temperatures = (await res.json()).map(t => ({...t, time: new Date(t.time * 1000) }));
 
-            tempChart.setData([data]);
-            tempChart.setupGrid();
-            tempChart.draw();
-        })
-        .always(function() {
-            setTimeout(refresh, 60000);
-        });
-    }
+const chart = () => {
+    const width = 800;
+    const height = 600;
 
-    refresh();
-}
+    const marginTop = 10;
+    const marginRight = 20;
+    const marginBottom = 20;
+    const marginLeft = 40;
 
-$(document).ready(ready);
+    const x = d3.scaleUtc(
+        d3.extent(temperatures, t => t.time),
+        [marginLeft, width - marginRight]
+    );
+
+    const y = d3.scaleLinear(
+        d3.extent(temperatures, t => t.temperature),
+        [height - marginBottom, marginTop]
+    );
+
+    const svg = d3.create("svg")
+        .attr("width", width)
+        .attr("height", height)
+        .attr("viewBox", [0, 0, width, height])
+        .attr("style", "max-width: 100%; height: auto");
+
+    // x-axis
+    svg.append("g")
+        .attr("transform", `translate(0,${height - marginBottom})`)
+        .call(d3.axisBottom(x).ticks(width / 80).tickSizeOuter(0));
+
+    // y-axis
+    svg.append("g")
+        .attr("transform", `translate(${marginLeft},0)`)
+        .call(d3.axisLeft(y));
+
+    // The actual line.
+    const line = d3.line()
+        .x(t => x(t.time))
+        .y(t => y(t.temperature));
+
+    svg.append("path").attr("fill", "none").attr("stroke", "steelblue").attr("stroke-width", 0.5).attr("d", line(temperatures));
+
+    return svg.node();
+};
+
+container.append(chart());
