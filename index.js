@@ -44,7 +44,11 @@ const chart = () => {
         .x(t => x(t.time))
         .y(t => y(t.temperature));
 
-    svg.append("path").attr("fill", "none").attr("stroke", "steelblue").attr("stroke-width", 1.0).attr("d", line(temperatures));
+    svg.append("path")
+        .attr("fill", "none")
+        .attr("stroke", "steelblue")
+        .attr("stroke-width", 1.0)
+        .attr("d", line(temperatures));
 
     return svg.node();
 };
