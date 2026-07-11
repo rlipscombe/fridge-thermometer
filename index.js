@@ -50,6 +50,13 @@ const chart = () => {
         .attr("stroke-width", 1.0)
         .attr("d", line(temperatures));
 
+    svg.append("text")
+        .attr("x", width / 2)
+        .attr("y", height / 2)
+        .attr("text-anchor", "middle")
+        .text(`${temperatures.at(-1).temperature.toFixed(1)} °C`)
+        .attr("style", "font-size: xxx-large; font-family: sans-serif;");
+
     return svg.node();
 };
 
