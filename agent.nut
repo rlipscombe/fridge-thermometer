@@ -50,9 +50,11 @@ app.get("/", function(context) {
 
 // Routes for static index.{html,js} files.
 app.get("/index.html", function(context) {
+    context.setHeader("Content-Type", "text/html");
     context.send("@{include("index.html")|escape}");
 });
 app.get("/index.js", function(context) {
+    context.setHeader("Content-Type", "text/javascript");
     context.send("@{include("index.js")|escape}");
 });
 
